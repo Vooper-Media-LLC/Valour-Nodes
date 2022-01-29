@@ -39,6 +39,7 @@ public static class NodeAPI
     public static void RegisterNode(Node node)
     {
         Nodes[node.Name] = node;
+        Console.WriteLine($"Registered node '{node.Name}'");
     }
 
     public static string Ping() => "pong";

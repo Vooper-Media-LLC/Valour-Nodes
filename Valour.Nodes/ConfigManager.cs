@@ -20,6 +20,14 @@ public static class ConfigManager {
         }
     }
 
+    public static void EnsureFileExists(string path){
+        // Ensure file exists. If not, create it.
+        if (!File.Exists(path)){
+            File.Create(path);
+            Console.WriteLine($"{path} not found. Creating...");
+        }
+    }
+
     /// <summary>
     /// Reads the stored node information and returns it as a list of nodes
     /// </summary>
@@ -27,10 +35,7 @@ public static class ConfigManager {
     public static Node[] ReadNodes()
     {
         // Ensure file exists. If not, create it.
-        if (!File.Exists(NODE_PATH)){
-            File.Create(NODE_PATH);
-            Console.WriteLine("Nodes file not found. Creating...");
-        }
+        EnsureFileExists(NODE_PATH);
 
         // Read all lines and prepare an array for the nodes
         var lines = File.ReadAllLines(FOLDER + "/" + NODE_TEXT);
@@ -45,6 +50,12 @@ public static class ConfigManager {
 
         // Return nodes
         return nodes;
+    }
+
+    public static async Task WriteNode(Node node){
+        EnsureFileExists(NODE_PATH);
+        await File.WriteAllLinesAsync(NODE_PATH, new string[] { node.Name });
+        Console.WriteLine($"Added '{node.Name}' to {NODE_TEXT}");
     }
 
 }

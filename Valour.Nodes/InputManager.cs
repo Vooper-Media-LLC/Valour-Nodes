@@ -1,3 +1,5 @@
+using Valour.Nodes.Models;
+
 namespace Valour.Nodes;
 
 /// <summary>
@@ -23,7 +25,8 @@ public static class InputManager
 
     public static readonly Dictionary<string, (Func<string[], Task> task, string description)> Commands = new(){
         { "help", (Help, "Shows this dialogue. Usage: help") },
-        { "addnode", (AddNode, "Adds a node to the node list. Usage: addnode <name>") }
+        { "addnode", (AddNode, "Adds a node to the node list. Usage: addnode <name>") },
+        { "nodes", (Nodes, "Shows the node list. Usage: nodes") }
     };
 
     /// <summary>
@@ -52,6 +55,25 @@ public static class InputManager
         if (args.Length != 1){
             Console.WriteLine("Usage: addnode <name>");
             return;
+        }
+
+        var name = args[0];
+
+        if (NodeAPI.Nodes.ContainsKey(name)){
+            Console.WriteLine($"Node {name} is already registered.");
+            return;
+        }
+
+        Node node = new(name);
+        await ConfigManager.WriteNode(node);
+        NodeAPI.RegisterNode(node);
+    }
+
+    public static async Task Nodes(string[] args){
+        Console.WriteLine("\n-- Current Nodes --");
+
+        foreach (var node in NodeAPI.Nodes.Values){
+            Console.WriteLine($"• {node.Name}");
         }
     }
 }
