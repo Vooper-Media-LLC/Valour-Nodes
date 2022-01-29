@@ -18,6 +18,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Enable input
+var input_task = Task.Run(InputManager.Run);
+
 NodeAPI.AddRoutes(app);
 
 app.Run();
