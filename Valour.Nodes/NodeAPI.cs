@@ -8,12 +8,22 @@ public static class NodeAPI
     /// <summary>
     /// All of the nodes, selectable by name
     /// </summary>
-    public static ConcurrentDictionary<string, Node> Nodes = new();
+    public static ConcurrentDictionary<string, Node> NodeMap = new();
 
     /// <summary>
     /// A map from Planet ID to the node it belongs to
     /// </summary>
     public static ConcurrentDictionary<ulong, Node> PlanetMap = new();
+
+    /// <summary>
+    /// All of the nodes
+    /// </summary>
+    public static List<Node> Nodes = new();
+
+    /// <summary>
+    /// The total number of nodes
+    /// </summary>
+    public static int node_count = 0;
 
     /// <summary>
     /// Initializes the Node API
@@ -25,7 +35,7 @@ public static class NodeAPI
         // Load saved nodes
         foreach (var node in ConfigManager.ReadNodes()){
             // Place node into node dictionary
-            Nodes[node.Name] = node;
+            RegisterNode(node);
             Console.WriteLine($"Loading node {node}...");
         }
     }
@@ -38,12 +48,14 @@ public static class NodeAPI
 
     public static void RegisterNode(Node node)
     {
-        Nodes[node.Name] = node;
+        NodeMap[node.Name] = node;
+        Nodes.Add(node);
         Console.WriteLine($"Registered node '{node.Name}'");
+        node_count++;
     }
 
     public static string Ping() => "pong";
 
-    public static object GetNodes() => Nodes;
+    public static object GetNodes() => NodeMap;
 }
 

@@ -59,7 +59,7 @@ public static class InputManager
 
         var name = args[0];
 
-        if (NodeAPI.Nodes.ContainsKey(name)){
+        if (NodeAPI.NodeMap.ContainsKey(name)){
             Console.WriteLine($"Node {name} is already registered.");
             return;
         }
@@ -72,7 +72,7 @@ public static class InputManager
     public static async Task Nodes(string[] args){
         Console.WriteLine("\n-- Current Nodes --");
 
-        foreach (var node in NodeAPI.Nodes.Values){
+        foreach (var node in NodeAPI.NodeMap.Values){
             Console.WriteLine($"• {node.Name}");
         }
     }
