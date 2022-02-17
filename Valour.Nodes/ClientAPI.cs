@@ -13,7 +13,7 @@ public static class ClientAPI
     public static int client_requests = 0;
 
     public static void AddRoutes(WebApplication app){
-        app.MapGet("/", ClientRoute);
+        app.MapGet("/client", ClientRoute);
     }
 
     /// <summary>
@@ -27,6 +27,6 @@ public static class ClientAPI
         // Iterate requests
         client_requests++;
 
-        return Results.Redirect(node.Address, true, true);
+        return Results.Redirect(node.Address, false, true);
     }
 }
