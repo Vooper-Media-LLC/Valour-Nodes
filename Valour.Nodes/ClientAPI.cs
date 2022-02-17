@@ -27,6 +27,8 @@ public static class ClientAPI
         // Iterate requests
         client_requests++;
 
+        Console.WriteLine("Redirect to " + node.Address);
+
         return Results.Redirect(node.Address, false, true);
     }
 }
