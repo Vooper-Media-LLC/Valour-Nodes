@@ -20,7 +20,7 @@ public static class ClientAPI
     /// This route serves the client. The goal is to evenly divide the requests across all nodes - 
     /// the client should be identical on them all!
     /// </summary>
-    public static object ClientRoute(){
+    public static IResult ClientRoute(){
 
         Node node = NodeAPI.Nodes[client_requests % NodeAPI.node_count];
 

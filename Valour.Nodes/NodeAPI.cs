@@ -92,16 +92,16 @@ public static class NodeAPI
     /// <summary>
     /// Returns the node location of the given planet id
     /// </summary>
-    public static Node GetPlanetLocation(ulong planet_id)
+    public static IResult GetPlanetLocation(ulong planet_id)
     {
         // Check if we have the planet registered
         if (HostedPlanetMap.ContainsKey(planet_id))
         {
-            return HostedPlanetMap[planet_id];
+            return Results.Json(HostedPlanetMap[planet_id]);
         }
 
         // In this case the planet is not owned by any nodes yet.
-        return AddHostedPlanet(planet_id);
+        return Results.Json(AddHostedPlanet(planet_id));
     }
 
     public static string PingRoute() => "pong";
