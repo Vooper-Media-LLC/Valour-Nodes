@@ -14,6 +14,7 @@ public static class ClientAPI
 
     public static void AddRoutes(WebApplication app){
         app.MapGet("/client", ClientRoute);
+        Console.WriteLine("Registered client routes");
     }
 
     /// <summary>
