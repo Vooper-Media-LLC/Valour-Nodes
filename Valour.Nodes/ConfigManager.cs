@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Valour.Nodes.Models;
 
 namespace Valour.Nodes;
@@ -7,6 +8,13 @@ public static class ConfigManager {
     const string FOLDER = "ValourConfig";
     const string NODE_TEXT = "Nodes.data";
     const string NODE_PATH = FOLDER + "/" + NODE_TEXT;
+    const string CONFIG_TEXT = "Config.json";
+    const string CONFIG_PATH = FOLDER + "/" + CONFIG_TEXT;
+
+    /// <summary>
+    /// The current config
+    /// </summary>
+    public static Config Config { get; set; }
     
     /// <summary>
     /// Initializes the configuration manager
@@ -18,6 +26,9 @@ public static class ConfigManager {
             Directory.CreateDirectory(FOLDER);
             Console.WriteLine("Configuration folder not found. Creating...");
         }
+
+        // Read the main config file
+        ReadConfig();
     }
 
     public static void EnsureFileExists(string path){
@@ -25,6 +36,22 @@ public static class ConfigManager {
         if (!File.Exists(path)){
             File.Create(path);
             Console.WriteLine($"{path} not found. Creating...");
+        }
+    }
+
+    public static void ReadConfig()
+    {
+        // Ensure file exists. If not, create it.
+        if (!File.Exists(CONFIG_PATH)) {
+            Config = new Config();
+            Config.API_Key = Guid.NewGuid().ToString();
+            File.WriteAllText(CONFIG_PATH, JsonSerializer.Serialize(Config));
+            Console.WriteLine("No config found. Generating...");
+        }
+        else
+        {
+            // Read json
+            Config = JsonSerializer.Deserialize<Config>(File.OpenRead(CONFIG_PATH));
         }
     }
 
