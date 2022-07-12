@@ -10,8 +10,7 @@ public class Node
     /// <summary>
     /// The name of this node. Should be short and memorable.
     /// </summary>
-    
-    [JsonPropertyName("Name")]
+
     public string Name { get; set; }
 
     /// <summary>
@@ -20,10 +19,14 @@ public class Node
     /// </summary>
     public readonly string Address;
 
-    public Node(string name)
+    public string Version { get; set; }
+
+    public DateTime LastPingTime { get; set; }
+
+    public Node(string name, string address)
     {
         Name = name;
-        Address = $"https://{name}.nodes.valour.gg";
+        Address = address;
     }
 }
 

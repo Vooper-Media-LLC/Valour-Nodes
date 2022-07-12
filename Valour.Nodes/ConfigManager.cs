@@ -3,7 +3,8 @@ using Valour.Nodes.Models;
 
 namespace Valour.Nodes;
 
-public static class ConfigManager {
+public static class ConfigManager
+{
 
     const string FOLDER = "ValourConfig";
     const string NODE_TEXT = "Nodes.data";
@@ -15,14 +16,15 @@ public static class ConfigManager {
     /// The current config
     /// </summary>
     public static Config Config { get; set; }
-    
+
     /// <summary>
     /// Initializes the configuration manager
     /// </summary>
     static ConfigManager()
     {
         // Ensure config location exists
-        if (!Directory.Exists(FOLDER)){
+        if (!Directory.Exists(FOLDER))
+        {
             Directory.CreateDirectory(FOLDER);
             Console.WriteLine("Configuration folder not found. Creating...");
         }
@@ -31,9 +33,11 @@ public static class ConfigManager {
         ReadConfig();
     }
 
-    public static void EnsureFileExists(string path){
+    public static void EnsureFileExists(string path)
+    {
         // Ensure file exists. If not, create it.
-        if (!File.Exists(path)){
+        if (!File.Exists(path))
+        {
             File.Create(path);
             Console.WriteLine($"{path} not found. Creating...");
         }
@@ -42,9 +46,10 @@ public static class ConfigManager {
     public static void ReadConfig()
     {
         // Ensure file exists. If not, create it.
-        if (!File.Exists(CONFIG_PATH)) {
+        if (!File.Exists(CONFIG_PATH))
+        {
             Config = new Config();
-            Config.API_Key = Guid.NewGuid().ToString();
+            Config.ApiKey = Guid.NewGuid().ToString();
             File.WriteAllText(CONFIG_PATH, JsonSerializer.Serialize(Config));
             Console.WriteLine("No config found. Generating...");
         }
@@ -70,7 +75,8 @@ public static class ConfigManager {
 
         // Create node instances using names
         int i = 0;
-        foreach (string line in lines){
+        foreach (string line in lines)
+        {
             nodes[i] = new Node(line);
             i++;
         }
@@ -79,7 +85,8 @@ public static class ConfigManager {
         return nodes;
     }
 
-    public static async Task WriteNode(Node node){
+    public static async Task WriteNode(Node node)
+    {
         EnsureFileExists(NODE_PATH);
         await File.WriteAllLinesAsync(NODE_PATH, new string[] { node.Name });
         Console.WriteLine($"Added '{node.Name}' to {NODE_TEXT}");

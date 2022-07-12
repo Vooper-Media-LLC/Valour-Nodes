@@ -10,8 +10,10 @@ public static class InputManager
     /// <summary>
     /// Runs the input handling logic
     /// </summary>
-    public static async Task Run(){
-        while (true){
+    public static async Task Run()
+    {
+        while (true)
+        {
             // Reads incoming command
             string command = Console.ReadLine().ToLower();
             // Splits into words
@@ -32,8 +34,10 @@ public static class InputManager
     /// <summary>
     /// Runs incoming commands
     /// </summary>
-    public static async Task RunCommand(string command, string[] args){
-        if (Commands.ContainsKey(command)){
+    public static async Task RunCommand(string command, string[] args)
+    {
+        if (Commands.ContainsKey(command))
+        {
             await Commands[command].task.Invoke(args);
         }
         else
@@ -42,7 +46,8 @@ public static class InputManager
         }
     }
 
-    public static async Task Help(string[] args){
+    public static async Task Help(string[] args)
+    {
         Console.WriteLine("\nWelcome to the Valour Node Manager. The following commands can be used: \n");
         foreach (var pair in Commands)
         {
@@ -51,28 +56,37 @@ public static class InputManager
         }
     }
 
-    public static async Task AddNode(string[] args){
-        if (args.Length != 1){
-            Console.WriteLine("Usage: addnode <name>");
+    public static async Task AddNode(string[] args)
+    {
+        if (args.Length != 2)
+        {
+            Console.WriteLine("Usage: addnode <name> <address>");
             return;
         }
 
         var name = args[0];
 
-        if (NodeAPI.NodeMap.ContainsKey(name)){
+        if (NodeAPI.NodeMap.ContainsKey(name))
+        {
             Console.WriteLine($"Node {name} is already registered.");
             return;
         }
 
-        Node node = new(name);
+        var address = args[1];
+        if (!address.Contains("valour.gg"))
+            Console.WriteLine("The address does not contain Valour.gg. Make sure this is not on prod!");
+
+        Node node = new(name, address);
         await ConfigManager.WriteNode(node);
         NodeAPI.RegisterNode(node);
     }
 
-    public static async Task Nodes(string[] args){
+    public static async Task Nodes(string[] args)
+    {
         Console.WriteLine("\n-- Current Nodes --");
 
-        foreach (var node in NodeAPI.NodeMap.Values){
+        foreach (var node in NodeAPI.NodeMap.Values)
+        {
             Console.WriteLine($"• {node.Name}");
         }
     }
