@@ -77,8 +77,9 @@ public static class InputManager
             Console.WriteLine("The address does not contain Valour.gg. Make sure this is not on prod!");
 
         Node node = new(name, address);
-        await ConfigManager.WriteNode(node);
         NodeAPI.RegisterNode(node);
+
+        await ConfigManager.WriteNodes(NodeAPI.Nodes);
     }
 
     public static async Task Nodes(string[] args)
@@ -87,7 +88,7 @@ public static class InputManager
 
         foreach (var node in NodeAPI.NodeMap.Values)
         {
-            Console.WriteLine($"• {node.Name}");
+            Console.WriteLine($"• {node.Name}: {node.Address}");
         }
     }
 }

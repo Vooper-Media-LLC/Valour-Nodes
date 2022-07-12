@@ -64,32 +64,26 @@ public static class ConfigManager
     /// Reads the stored node information and returns it as a list of nodes
     /// </summary>
     /// <returns>The list of saved node information</returns>
-    public static Node[] ReadNodes()
+    public static List<Node> ReadNodes()
     {
         // Ensure file exists. If not, create it.
         EnsureFileExists(NODE_PATH);
 
-        // Read all lines and prepare an array for the nodes
-        var lines = File.ReadAllLines(FOLDER + "/" + NODE_TEXT);
-        Node[] nodes = new Node[lines.Length];
-
-        // Create node instances using names
-        int i = 0;
-        foreach (string line in lines)
-        {
-            nodes[i] = new Node(line);
-            i++;
-        }
+        if (new FileInfo(FOLDER + "/" + NODE_TEXT).Length < 1)
+            return new List<Node>();
+            
+        var nodes = JsonSerializer.Deserialize<List<Node>>(File.ReadAllText(FOLDER + "/" + NODE_TEXT));
 
         // Return nodes
         return nodes;
     }
 
-    public static async Task WriteNode(Node node)
+    public static async Task WriteNodes(List<Node> nodes)
     {
         EnsureFileExists(NODE_PATH);
-        await File.WriteAllLinesAsync(NODE_PATH, new string[] { node.Name });
-        Console.WriteLine($"Added '{node.Name}' to {NODE_TEXT}");
+        string json = JsonSerializer.Serialize(nodes);
+        await File.WriteAllTextAsync(NODE_PATH, json);
+        Console.WriteLine($"Wrote node data to {NODE_TEXT}");
     }
 
 }
