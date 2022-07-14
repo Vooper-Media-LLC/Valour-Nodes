@@ -33,8 +33,9 @@ public static class ClientAPI
 
         var queryString = ctx.Request.QueryString;
 
-        Console.WriteLine("Redirect to " + node.Address + routeEnd + queryString);
+        Console.WriteLine("Redirect to " + node.Address + "/" + routeEnd + queryString);
 
-        return Results.Redirect(node.Address + routeEnd + queryString, false, true);
+        return Results.Redirect(node.Address + "/" +
+            routeEnd + queryString, false, true);
     }
 }
