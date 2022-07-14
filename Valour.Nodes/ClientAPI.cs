@@ -23,6 +23,9 @@ public static class ClientAPI
     /// </summary>
     public static IResult ClientRoute(HttpContext ctx, string routeEnd){
 
+        if (NodeAPI.node_count == 0)
+            return Results.Problem("No nodes are currently online.");
+
         Node node = NodeAPI.Nodes[client_requests % NodeAPI.node_count];
 
         // Iterate requests
