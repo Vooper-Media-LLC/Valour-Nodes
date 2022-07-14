@@ -13,7 +13,7 @@ public static class ClientAPI
     public static int client_requests = 0;
 
     public static void AddRoutes(WebApplication app){
-        app.MapGet("/client", ClientRoute);
+        app.MapGet("/client/{*routeEnd}", ClientRoute);
         Console.WriteLine("Registered client routes");
     }
 
@@ -21,15 +21,17 @@ public static class ClientAPI
     /// This route serves the client. The goal is to evenly divide the requests across all nodes - 
     /// the client should be identical on them all!
     /// </summary>
-    public static IResult ClientRoute(){
+    public static IResult ClientRoute(HttpContext ctx, string routeEnd){
 
         Node node = NodeAPI.Nodes[client_requests % NodeAPI.node_count];
 
         // Iterate requests
         client_requests++;
 
-        Console.WriteLine("Redirect to " + node.Address);
+        var queryString = ctx.Request.QueryString;
 
-        return Results.Redirect(node.Address, false, true);
+        Console.WriteLine("Redirect to " + node.Address + routeEnd + queryString);
+
+        return Results.Redirect(node.Address + routeEnd + queryString, false, true);
     }
 }
