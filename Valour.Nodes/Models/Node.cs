@@ -13,15 +13,16 @@ public class Node
 
     public string Name { get; set; }
 
-    /// <summary>
-    /// The address of this node. This is readonly because it depends on the (unchanging) name
-    /// and this saves work (string concatenation)
-    /// </summary>
-    public readonly string Address;
+    public string Address { get; set; }
 
     public string Version { get; set; }
 
     public DateTime LastPingTime { get; set; }
+
+    public Node()
+    {
+
+    }
 
     public Node(string name, string address)
     {

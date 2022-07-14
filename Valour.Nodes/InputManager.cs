@@ -77,7 +77,7 @@ public static class InputManager
             Console.WriteLine("The address does not contain Valour.gg. Make sure this is not on prod!");
 
         Node node = new(name, address);
-        NodeAPI.RegisterNode(node);
+        await NodeAPI.RegisterNode(node);
 
         await ConfigManager.WriteNodes(NodeAPI.Nodes);
     }

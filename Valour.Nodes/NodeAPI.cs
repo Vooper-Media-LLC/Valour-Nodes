@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Valour.Nodes.Models;
 
 namespace Valour.Nodes;
@@ -50,8 +51,13 @@ public static class NodeAPI
 
     public class NodeHandshakeResponse
     {
+        [JsonInclude]
+        [JsonPropertyName("version")]
         public string Version { get; set; }
-        public List<long> PlanetIds { get; set; }
+
+        [JsonInclude]
+        [JsonPropertyName("planetIds")]
+        public IEnumerable<long> PlanetIds { get; set; }
     }
 
     /// <summary>
@@ -80,10 +86,11 @@ public static class NodeAPI
         app.MapGet("/nodes/planet/{planet_id}/name", GetPlanetNodeNameRoute);
     }
 
-    public static async void RegisterNode(Node node)
+    public static async Task RegisterNode(Node node)
     {
         // Perform handshake with node to ensure it is valid and online
-        var response = await _http.GetAsync($"{node.Address}/api/version");
+        Console.WriteLine($"GET {node.Address}/api/node/handshake");
+        var response = await _http.GetAsync($"{node.Address}/api/node/handshake");
         if (!response.IsSuccessStatusCode)
         {
             Console.WriteLine($"Failed to contact node '{node.Name} ({response.StatusCode})'");
@@ -96,16 +103,19 @@ public static class NodeAPI
             node.Version = content.Version;
 
             // Set planets that the node is serving.
-            foreach (var planetId in content.PlanetIds)
+            if (content.PlanetIds is not null)
             {
-                if (!HostedPlanetMap.ContainsKey(planetId))
+                foreach (var planetId in content.PlanetIds)
                 {
-                    HostedPlanetMap[planetId] = node;
-                }
-                else
-                {
-                    // TODO: Tell the node to stop serving this planet, since we already have a node
-                    // serving it. Or determine to tell *that* node to stop. 
+                    if (!HostedPlanetMap.ContainsKey(planetId))
+                    {
+                        HostedPlanetMap[planetId] = node;
+                    }
+                    else
+                    {
+                        // TODO: Tell the node to stop serving this planet, since we already have a node
+                        // serving it. Or determine to tell *that* node to stop. 
+                    }
                 }
             }
 
