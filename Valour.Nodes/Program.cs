@@ -27,6 +27,6 @@ if (app.Environment.IsDevelopment())
 var input_task = Task.Run(InputManager.Run);
 
 NodeAPI.AddRoutes(app);
-ClientAPI.AddRoutes(app);
+RoutingAPI.AddRoutes(app);
 
 app.Run();
